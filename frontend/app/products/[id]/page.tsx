@@ -52,15 +52,15 @@ const Product = (props: ProductProps) => {
     </div>
   );
 
-  return (
-    <div className="flex justify-center h-screen w-full">
-      <div className="flex flex-col w-[500px] py-12 space-y-4">
-        {header}
-        {image}
-        {cart}
-        {description}
-      </div>
+  const productEl = product && (
+    <div className="flex flex-col w-[500px] py-12 space-y-4">
+      {header}
+      {image}
+      {cart}
+      {description}
     </div>
   );
+
+  return <div className="flex justify-center h-screen w-full">{productEl}</div>;
 };
 export default Product;
