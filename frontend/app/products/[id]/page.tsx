@@ -1,6 +1,7 @@
 "use client";
 
 import { GetProductById } from "@/backend-services/product-management/rest-api";
+import Navigation from "@/components/navigation/Navigation";
 import { Fetch } from "@/utils/api";
 import { Button } from "antd";
 import { usePathname, useRouter } from "next/navigation";
@@ -21,20 +22,21 @@ const Product = (props: ProductProps) => {
     ).then((response) => setProduct(response));
   }, [pathname]);
 
-  const back = (
-    <Button
-      onClick={() => {
-        router.push("/");
-      }}
-    >
-      Back
-    </Button>
-  );
+  const onHomeClick = () => {
+    router.push("/");
+  };
+  const onCartClick = () => {
+    router.push("/cart");
+  };
+
+  const navigation = <Navigation onCartClick={onCartClick} />;
+
+  const home = <Button onClick={onHomeClick}>Home</Button>;
 
   const header = (
     <div className="flex justify-between">
       <h1 className="text-2xl font-bold">{product?.name}</h1>
-      {back}
+      {home}
     </div>
   );
 
@@ -53,7 +55,7 @@ const Product = (props: ProductProps) => {
   );
 
   const productEl = product && (
-    <div className="flex flex-col w-[500px] py-12 space-y-4">
+    <div className="flex flex-col w-[500px] py-2 space-y-4">
       {header}
       {image}
       {cart}
@@ -61,6 +63,11 @@ const Product = (props: ProductProps) => {
     </div>
   );
 
-  return <div className="flex justify-center h-screen w-full">{productEl}</div>;
+  return (
+    <div className="flex flex-col items-center h-screen space-y-4 w-full">
+      {navigation}
+      {productEl}
+    </div>
+  );
 };
 export default Product;
