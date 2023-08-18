@@ -21,7 +21,10 @@ const getAppRouter = () => {
          */
         const response = controller({ body, params: params as any });
 
-        res.status(response.statusCode).json(response.response.data);
+        if (response) {
+          res.status(response.statusCode).json(response.response.data);
+          break;
+        }
       }
     });
   });
