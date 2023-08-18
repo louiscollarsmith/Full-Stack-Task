@@ -1,4 +1,4 @@
-export const Fetch = async (
+export const Fetch = async <ResponseType>(
   method: "GET" | "POST" | "PATCH" | "PUT" | "DELETE",
   url: string,
   body?: any
@@ -7,10 +7,10 @@ export const Fetch = async (
     method,
     body: !!body ? JSON.stringify({ url, body }) : undefined,
   });
-  const json = await response.json();
-  if (response.status >= 300) {
-    throw new Error(json.error);
-  } else {
-    return json;
-  }
+  const json = (await response.json()) as ResponseType;
+  // if (response.status >= 300) {
+  // throw new Error(json.error);
+  // } else {
+  return json;
+  // }
 };

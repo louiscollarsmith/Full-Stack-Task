@@ -3,7 +3,7 @@ const nextConfig = {
   rewrites: async () => [
     {
       source: "/:path*",
-      destination: `http://localhost:2000/:path*`,
+      destination: `http://localhost:3001/:path*`,
     },
   ],
 };
