@@ -1,3 +1,6 @@
+import { Fetch } from "@/utils/api";
+import { UrlToParamObj } from "@/utils/rest-api/types/utils";
+
 interface ProductDB {
   id: string;
   sku: string;
@@ -19,11 +22,36 @@ namespace GetAllProducts {
 
 namespace GetProductById {
   export const method = "GET";
-  const path = "/api/products";
+  const path = "/api/products/:productId";
 
-  export const getUrl = (id: string) => `${path}/${id}`;
+  export type ParamsObjType = UrlToParamObj<typeof path>;
 
-  export type ApiResponseType = ProductDB;
+  export const getUrl = (paramsObj: ParamsObjType) =>
+    path.replace(":productId", paramsObj.productId);
+
+  export type ApiResponseType = ProductDB | undefined;
 }
 
-export { GetAllProducts, GetProductById };
+const query = {
+  getAllProducts: async (): Promise<GetAllProducts.ApiResponseType> => {
+    const products = await Fetch<GetAllProducts.ApiResponseType>(
+      GetAllProducts.method,
+      GetAllProducts.getUrl()
+    );
+
+    return products;
+  },
+
+  getProductById: async (
+    paramsObj: GetProductById.ParamsObjType
+  ): Promise<GetProductById.ApiResponseType> => {
+    const product = await Fetch<GetProductById.ApiResponseType>(
+      GetProductById.method,
+      GetProductById.getUrl(paramsObj)
+    );
+
+    return product;
+  },
+} as const;
+
+export { GetAllProducts, GetProductById, query };

@@ -1,26 +1,35 @@
 "use client";
 
-import { GetProductById } from "@/backend-services/product-management/rest-api";
+import { query } from "@/backend-services/product-management/rest-api";
 import Navigation from "@/components/navigation/Navigation";
-import { Fetch } from "@/utils/api";
+import { useCallApi } from "@/hooks/use-call-api";
 import { Button } from "antd";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 interface ProductProps {}
 
 const Product = (props: ProductProps) => {
+  const {
+    data: product,
+    error,
+    loading,
+    callApi: fetchProductById,
+  } = useCallApi(query.getProductById);
   const pathname = usePathname();
   const router = useRouter();
-  const [product, setProduct] = useState<GetProductById.ApiResponseType>();
 
   useEffect(() => {
     const productId = pathname.split("/")[2];
-    Fetch<GetProductById.ApiResponseType>(
-      GetProductById.method,
-      GetProductById.getUrl(productId)
-    ).then((response) => setProduct(response));
+    fetchProductById({ productId });
   }, [pathname]);
+
+  useEffect(() => {
+    if (error) {
+      // Replace with popup
+      alert(`Error fetching product details: ${error}`);
+    }
+  }, [error]);
 
   const onHomeClick = () => {
     router.push("/");
@@ -66,7 +75,7 @@ const Product = (props: ProductProps) => {
   return (
     <div className="flex flex-col items-center h-screen space-y-4 w-full">
       {navigation}
-      {productEl}
+      {loading ? <span>Loading product details...</span> : productEl}
     </div>
   );
 };

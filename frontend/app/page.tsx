@@ -1,18 +1,22 @@
 "use client";
 
-import { Button } from "antd";
-import { useEffect, useState } from "react";
-import { Fetch } from "../utils/api";
-import { GetAllProducts } from "@/backend-services/product-management/rest-api";
+import { useEffect } from "react";
+import { query } from "@/backend-services/product-management/rest-api";
 import {
   ProductList,
   ProductListProps,
 } from "@/components/product-list/product-list";
 import { useRouter } from "next/navigation";
 import Navigation from "@/components/navigation/Navigation";
+import { useCallApi } from "@/hooks/use-call-api";
 
 export default function Home() {
-  const [products, setProducts] = useState<GetAllProducts.ApiResponseType>();
+  const {
+    data: products,
+    error,
+    loading,
+    callApi: fetchAllProducts,
+  } = useCallApi(query.getAllProducts);
   const router = useRouter();
 
   const onProductClickHandler: ProductListProps["onProductClickHandler"] = (
@@ -22,11 +26,15 @@ export default function Home() {
   };
 
   useEffect(() => {
-    Fetch<GetAllProducts.ApiResponseType>(
-      GetAllProducts.method,
-      GetAllProducts.getUrl()
-    ).then((response) => setProducts(response));
+    fetchAllProducts();
   }, []);
+
+  useEffect(() => {
+    if (error) {
+      // Replace with popup
+      alert(`Error fetching products: ${error}`);
+    }
+  }, [error]);
 
   const onCartClick = () => {
     router.push("/cart");
@@ -40,11 +48,15 @@ export default function Home() {
       <h2 style={{ fontWeight: "bold" }}>
         <u>Products List</u>
       </h2>
-      {products && (
-        <ProductList
-          products={products}
-          onProductClickHandler={onProductClickHandler}
-        />
+      {loading ? (
+        <span>Loading products...</span>
+      ) : (
+        products && (
+          <ProductList
+            products={products}
+            onProductClickHandler={onProductClickHandler}
+          />
+        )
       )}
     </div>
   );
