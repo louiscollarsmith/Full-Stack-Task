@@ -1,7 +1,7 @@
 import * as productsModel from "../../models/database/product";
 
-const createProduct = (productToCreate: Omit<productsModel.ProductDB, "id">) =>
-  productsModel.insert(productToCreate);
+const createProduct = (...args: Parameters<typeof productsModel.insert>) =>
+  productsModel.insert(...args);
 
 const getAllProducts = () => productsModel.findAll();
 
