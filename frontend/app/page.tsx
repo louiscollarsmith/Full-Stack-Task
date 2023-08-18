@@ -9,6 +9,7 @@ import {
   ProductListProps,
 } from "@/components/product-list/product-list";
 import { useRouter } from "next/navigation";
+import Navigation from "@/components/navigation/Navigation";
 
 export default function Home() {
   const [products, setProducts] = useState<GetAllProducts.ApiResponseType>();
@@ -27,8 +28,15 @@ export default function Home() {
     ).then((response) => setProducts(response));
   }, []);
 
+  const onCartClick = () => {
+    router.push("/cart");
+  };
+
+  const navigation = <Navigation onCartClick={onCartClick} />;
+
   return (
-    <main className="flex flex-col space-y-2 items-center justify-center w-full h-full p-24">
+    <div className="flex flex-col items-center h-screen space-y-4 w-full">
+      {navigation}
       <h2 style={{ fontWeight: "bold" }}>
         <u>Products List</u>
       </h2>
@@ -38,6 +46,6 @@ export default function Home() {
           onProductClickHandler={onProductClickHandler}
         />
       )}
-    </main>
+    </div>
   );
 }

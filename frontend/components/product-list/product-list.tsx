@@ -17,6 +17,7 @@ const ProductList: React.FC<ProductListProps> = (props) => {
         display: "flex",
         flexDirection: "column",
         maxWidth: "800px",
+        overflow: "auto",
         gap: "2rem",
       }}
     >
