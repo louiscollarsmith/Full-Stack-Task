@@ -21,7 +21,16 @@ const ProductListItem: React.FC<ProductListItemProps> = (props) => {
         gap: "1rem",
       }}
     >
-      <img style={{ width: "7rem" }} src={product.photoURL} />
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          width: "15rem",
+          height: "8rem",
+        }}
+      >
+        <img style={{ width: "100%", height: "100%" }} src={product.photoURL} />
+      </div>
       <div
         style={{
           display: "flex",
@@ -30,7 +39,22 @@ const ProductListItem: React.FC<ProductListItemProps> = (props) => {
         }}
       >
         <b>{product.name}</b>
-        <p style={{ margin: 0, padding: 0 }}>{product.description}</p>
+        <b>
+          {product.price} {product.currency}
+        </b>
+        <p
+          style={{
+            margin: 0,
+            padding: 0,
+            WebkitLineClamp: 1,
+            WebkitBoxOrient: "vertical",
+            display: "-webkit-box",
+            overflow: "hidden",
+            lineHeight: "normal",
+          }}
+        >
+          {product.description}
+        </p>
       </div>
     </article>
   );
