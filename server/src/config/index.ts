@@ -4,7 +4,7 @@
  * This module exposes methods to fetch environment variables
  */
 
-import 'dotenv/config';
+import "dotenv/config";
 
 /**
  * @public
@@ -28,34 +28,4 @@ const getPort = (): number => {
   return PORT_NUM;
 };
 
-/**
- * @public
- *
- * Returns kibana server URL from environment variable
- */
-const getKibanaServerUrl = (): string => {
-  const { KIBANA_URL } = process.env;
-
-  if (!KIBANA_URL) {
-    throw new Error(`'KIBANA_URL' environment variable is not set`);
-  }
-
-  return KIBANA_URL;
-};
-
-/**
- * @public
- *
- * Returns control center URL from environment variable
- */
-const getControlCenterUrl = (): string => {
-  const { CONTROL_CENTER_URL } = process.env;
-
-  if (!CONTROL_CENTER_URL) {
-    throw new Error(`'CONTROL_CENTER_URL' environment variable is not set`);
-  }
-
-  return CONTROL_CENTER_URL;
-};
-
-export { getPort, getKibanaServerUrl, getControlCenterUrl };
+export { getPort };

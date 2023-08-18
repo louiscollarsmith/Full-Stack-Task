@@ -5,20 +5,9 @@
  * starts ifd kibana proxy server
  */
 
-import path from "path";
 import express from "express";
-// import cookieParser from 'cookie-parser';
-import cors from "cors";
 import logger from "./logger";
-import {
-  getPort,
-  getKibanaServerUrl /* getControlCenterUrl */,
-} from "./config";
-import { getKibanaProxyMiddleware } from "./middleware/proxy/kibana";
-// import { checkSessionWithControlCenter } from './middleware/session';
-import kibanaRouter from "./routes/kibana.routes";
-import healthCheckRouter from "./routes/healthCheck.router";
-import errorsRouter from "./routes/errors.router";
+import { getPort } from "./config";
 import { getAppRouter } from "./routes";
 
 /**
@@ -31,13 +20,11 @@ const start = async (): Promise<void> => {
     const app = express();
     const PORT = getPort();
 
+    // Parse body as json
     app.use(express.json());
 
     // Add routes
     app.use(getAppRouter());
-    app.use("/hello", (req, res) => {
-      res.json({ success: "hello" });
-    });
 
     // Start HTTP server
     await new Promise<void>((resolve, reject) => {
