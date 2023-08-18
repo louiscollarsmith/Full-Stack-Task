@@ -1,11 +1,11 @@
 import { Router } from "express";
-
 import { productRoutes } from "../modules/products/routes";
+import { cartRoutes } from "../modules/cart/routes";
 
 const getAppRouter = () => {
   const router = Router();
 
-  const appRoutes = [...productRoutes];
+  const appRoutes = [...productRoutes, ...cartRoutes];
 
   appRoutes.forEach((appRoute) => {
     router[appRoute.method](appRoute.path, async (req, res) => {
@@ -14,7 +14,12 @@ const getAppRouter = () => {
       const { controllers } = appRoute;
 
       for (const controller of controllers) {
-        const response = controller({ body, params });
+        /**
+         * Duck typing with any to save time as other TS
+         * setup is required to type this accurately
+         *
+         */
+        const response = controller({ body, params: params as any });
 
         res.status(response.statusCode).json(response.response.data);
       }
