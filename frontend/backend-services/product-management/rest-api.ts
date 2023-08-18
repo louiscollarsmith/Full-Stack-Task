@@ -16,6 +16,7 @@ namespace GetAllProducts {
 
   export type ApiResponseType = ProductDB[];
 }
+
 namespace GetProductById {
   export const method = "GET";
   const path = "/api/products";
