@@ -1,9 +1,14 @@
-import type { ProductDB } from "./product";
+import { z } from "zod";
+import { ProductDBSchema, ProductDB } from "./product";
 
-interface CartDB {
-  id: string;
-  productsInCart: ProductDB[];
-}
+const CartSchema = z
+  .object({
+    id: z.string().nonempty(),
+    productsInCart: ProductDBSchema.array(),
+  })
+  .strict();
+
+interface CartDB extends z.infer<typeof CartSchema> {}
 
 const mockCartDB: CartDB = {
   id: "someUniqueId",
@@ -30,4 +35,4 @@ const removeProductFromCart = (productId: ProductDB["id"]) => {
   return mockCartDB;
 };
 
-export { addToCart, removeProductFromCart, getCart };
+export { CartSchema, addToCart, removeProductFromCart, getCart };

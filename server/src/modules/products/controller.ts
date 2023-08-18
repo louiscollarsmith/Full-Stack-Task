@@ -1,8 +1,11 @@
-import { ProductDB } from "../../models/database/product";
+import { ProductDB, ProductSchema } from "../../models/database/product";
 import * as productService from "./service";
 
-const createProduct = (args: { body: Omit<ProductDB, "id"> }) => {
+const createProduct = async (args: { body: Omit<ProductDB, "id"> }) => {
   const { body } = args;
+
+  // Validate the incoming data
+  await ProductSchema.parseAsync(body);
 
   const insertedProduct = productService.createProduct(body);
 

@@ -1,8 +1,11 @@
-import { ProductDB } from "../../models/database/product";
+import { ProductDB, ProductDBSchema } from "../../models/database/product";
 import * as cartService from "./service";
 
-const addToCart = (args: { body: ProductDB }) => {
+const addToCart = async (args: { body: ProductDB }) => {
   const { body: product } = args;
+
+  // Validate incoming data
+  await ProductDBSchema.parseAsync(product);
 
   const updatedCart = cartService.addToCart(product);
 

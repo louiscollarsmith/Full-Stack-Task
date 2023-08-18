@@ -1,12 +1,29 @@
-interface ProductDB {
-  id: string;
-  sku: string;
-  name: string;
-  price: number;
-  currency: string;
-  description: string;
-  photoURL: string;
-}
+import { z } from "zod";
+
+const ProductSchema = z
+  .object({
+    sku: z.string().min(5),
+    name: z.string().nonempty(),
+    price: z.number().positive(),
+    currency: z
+      .string()
+      .refine(
+        (currency) =>
+          currency.length === 3 && currency.toUpperCase() === currency,
+        {
+          message: "Must be uppercase and have exactly 3 characters",
+        }
+      ),
+    description: z.string().nonempty(),
+    photoURL: z.string().url(),
+  })
+  .strict();
+
+const ProductDBSchema = ProductSchema.extend({
+  id: z.string().nonempty(),
+}).strict();
+
+interface ProductDB extends z.infer<typeof ProductDBSchema> {}
 
 const mockProducts: ProductDB[] = [
   {
@@ -81,4 +98,4 @@ const findAll = () => mockProducts;
 const findById = (productId: ProductDB["id"]) =>
   mockProducts.find((mockProduct) => mockProduct.id === productId);
 
-export { ProductDB, findAll, findById, insert };
+export { ProductDB, ProductSchema, ProductDBSchema, findAll, findById, insert };
