@@ -14,7 +14,7 @@ namespace GetAllProducts {
 
   export const getUrl = () => path;
 
-  export type ApiResponseType = ProductDB;
+  export type ApiResponseType = ProductDB[];
 }
 
 export { GetAllProducts };
